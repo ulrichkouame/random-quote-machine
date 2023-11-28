@@ -43,4 +43,16 @@ body {
 
 #tweet-quote {
   text-decoration: none;
+  color: #333;
+}
+
+.by {
+  font-size: small;
+  color: #fff !important;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.by a {
+  color: #fff;
 }

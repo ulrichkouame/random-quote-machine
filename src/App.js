@@ -67,23 +67,35 @@ class App extends Component {
   render() {
     const { quote, author, color } = this.state;
     const tweetUrl = `https://twitter.com/intent/tweet?text="${quote}" - ${author}`;
+    const myGithub = `https://github.com/ulrichkouame`;
 
     return (
-      <div id="quote-box">
-        <div id="text" style={{ color: color }}><span className='quote'>"</span>{quote}<span className='quote'>"</span></div>
-        <div id="author" style={{ color: color }}>{author}</div>
-        <button id="new-quote" style={{ backgroundColor: color }} onClick={this.handleNewQuote}>
-          New Quote
-        </button>
-        <a
-          id="tweet-quote"
-          href={tweetUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Tweet Quote
-        </a>
-      </div>
+      <>
+        <div id="quote-box">
+          <div id="text" style={{ color: color }}><span className='quote'>"</span>{quote}<span className='quote'>"</span></div>
+          <div id="author" style={{ color: color }}>{author}</div>
+          <button id="new-quote" style={{ backgroundColor: color }} onClick={this.handleNewQuote}>
+            New Quote
+          </button>
+          <a
+            id="tweet-quote"
+            href={tweetUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Tweet Quote
+          </a>
+        </div>
+        <div className='by'>
+          <a
+            href={myGithub}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            by KOUAME Ulrich
+          </a>
+        </div>
+      </>
     );
   }
 }
