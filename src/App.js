@@ -1,59 +1,47 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      quote: '',
-      author: '',
-      color: '#333',
-      clickCount: 0,
-      color_position: 0,
-    };
-  }
+const App = () => {
+  const [quoteState, setQuoteState] = useState({
+    quote: '',
+    author: '',
+    color: '#333',
+    colorPosition: 0,
+  });
 
-  componentDidMount() {
-    this.fetchQuote();
-  }
+  useEffect(() => {
+    fetchQuote();
+  }, []);
 
-  fetchQuote = async () => {
+  const fetchQuote = async () => {
     try {
       const response = await fetch('https://api.quotable.io/random');
       const data = await response.json();
-      this.setState({
+      setQuoteState((prev) => ({
+        ...prev,
         quote: data.content,
         author: data.author,
-      });
+      }));
     } catch (error) {
       console.error('Error fetching quote:', error);
     }
   };
 
-  handleNewQuote = () => {
-    this.fetchQuote();
-    console.log(this.state.clickCount)
-    this.setState((prevState) => ({
-      clickCount: prevState.clickCount + 1,
-    }), () => {
-      if (this.state.clickCount % 2 === 0) {
-        this.changeColors();
-        this.setState({
-          clickCount: 0,
-        });
-      }
-    });
+  const handleNewQuote = () => {
+    fetchQuote();
+    changeColors();
   };
 
-  changeColors = () => {
+  const changeColors = () => {
     const colors = ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c', '#e67e22', '#34495e'];
-    const newColor = colors[this.state.color_position];
-    let position = this.state.color_position >= 7 ? 0 : this.state.color_position;
+    const newColor = colors[quoteState.colorPosition];
+    let position = quoteState.colorPosition >= 7 ? 0 : quoteState.colorPosition;
 
-    this.setState({
+    setQuoteState((prev) => ({
+      ...prev,
       color: newColor,
-      color_position: position+1
-    });
+      colorPosition: position + 1,
+    }));
 
     // Mettez à jour la couleur du fond du body
     document.body.style.transition = 'background-color 0.5s ease';
@@ -64,40 +52,40 @@ class App extends Component {
     }, 500);
   };
 
-  render() {
-    const { quote, author, color } = this.state;
-    const tweetUrl = `https://twitter.com/intent/tweet?text="${quote}" - ${author}`;
-    const myGithub = `https://github.com/ulrichkouame`;
+  const { quote, author, color } = quoteState;
+  const tweetUrl = `https://twitter.com/intent/tweet?text="${quote}" - ${author}`;
+  const myGithub = `https://github.com/ulrichkouame`;
 
-    return (
-      <>
-        <div id="quote-box">
-          <div id="text" style={{ color: color }}><span className='quote'>"</span>{quote}<span className='quote'>"</span></div>
-          <div id="author" style={{ color: color }}>{author}</div>
-          <button id="new-quote" style={{ backgroundColor: color }} onClick={this.handleNewQuote}>
-            New Quote
-          </button>
-          <a
-            id="tweet-quote"
-            href={tweetUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Tweet Quote
-          </a>
+  return (
+    <>
+      <div id="quote-box">
+        <div id="text" style={{ color: color }}>
+          <span className='quote'>"</span>{quote}<span className='quote'>"</span>
         </div>
-        <div className='by'>
-          <a
-            href={myGithub}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            by KOUAME Ulrich
-          </a>
-        </div>
-      </>
-    );
-  }
-}
+        <div id="author">{author}</div>
+        <button id="new-quote" style={{ backgroundColor: color }} onClick={handleNewQuote}>
+          New Quote
+        </button>
+        <a
+          id="tweet-quote"
+          href={tweetUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Tweet Quote
+        </a>
+      </div>
+      <div className='by'>
+        <a
+          href={myGithub}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          by KOUAME Ulrich
+        </a>
+      </div>
+    </>
+  );
+};
 
 export default App;
